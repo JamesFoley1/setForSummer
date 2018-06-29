@@ -1,0 +1,28 @@
+<div style="width:90%; height:400px; margin:auto;"id="{{map_id}}"></div>
+<script>
+    function initMap(){
+        var longitude = {{ lon }};
+        var latitude = {{ lat }};
+        
+        var coords = {
+            lat:latitude,
+            lng:longitude
+        };
+
+        var options = {
+            zoom:18,
+            center:coords
+        };
+        
+        map = new google.maps.Map(document.getElementById({{map_id}}), options);
+
+        function addMarker(coords){
+            var marker  = new google.maps.Marker({
+                position: coords,
+                map:map,
+            });
+        }
+        addMarker(coords);
+    }
+    initMap()
+</script>

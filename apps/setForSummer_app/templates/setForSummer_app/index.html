@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Finger+Paint" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="{% static 'setForSummer_app/CSS/materialize.css'%}" media="screen,projection"
+    />
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/pie.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.slider').slider();
+            $('.sidenav').sidenav();
+            $('.modal').modal();
+            $('#data_toggle').click(function() {
+                $('#data').toggle('slow');
+            })
+            var chart = AmCharts.makeChart( "chartdiv", {
+                "type": "pie",
+                "theme": "light",
+                "titles": [ {
+                "text": "WA Income Census",
+                "size": 10
+                } ],
+                "dataProvider": [ {
+                "income": "Under $50K",
+                "population": 456308
+                }, {
+                "income": "$50K-$100K",
+                "population": 444303
+                }, {
+                "income": "$100K-$200K",
+                "population": 402668
+                }, {
+                "income": "Over $200K",
+                "population": 161662
+                }],
+                "valueField": "population",
+                "titleField": "income",
+                "startEffect": "elastic",
+                "startDuration": 2,
+                "labelRadius": 10,
+                "innerRadius": "60%",
+                "depth3D": 10,
+                "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                "angle": 14,
+                "export": {
+                "enabled": true
+                }
+            });
+            var chart = AmCharts.makeChart( "chartdiv2", {
+                "type": "pie",
+                "theme": "light",
+                "titles": [ {
+                "text": "State wide poverty scale",
+                "size": 10
+                } ],
+                "dataProvider": [ {
+                "status": "Seattle",
+                "percentage": 115
+                },
+                {
+                "status": "Other",
+                "percentage": 5
+                }],
+                "valueField": "percentage",
+                "titleField": "status",
+                "startEffect": "elastic",
+                "startDuration": 2,
+                "labelRadius": 15,
+                "innerRadius": "60%",
+                "depth3D": 10,
+                "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                "angle": 14,
+                "export": {
+                "enabled": true
+                }
+            });
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawSeriesChart);
+
+            function drawSeriesChart() {
+                // population in ID tag
+            var data = google.visualization.arrayToDataTable([
+                ['Count', 'x', 'y', 'Zipcode', 'Population'],
+                {% for data in list %}
+                    ['{{ data.count }}', Math.floor(Math.random() * 80)+2, Math.floor(Math.random() * 80)+2, '{{ data.zip }}', {{ data.count }}],
+                {% endfor %}
+            ]);
+            var options = {
+                title: 'Need Based On Zip Code',
+                hAxis: {
+                    baselineColor: 'transparent',
+                    gridlines: {
+                        count: 0
+                    },
+                    textPosition: 'none'
+                    },
+                    vAxis: {
+                    baselineColor: 'transparent',
+                    gridlines: {
+                        count: 1
+                    },
+                    textPosition: 'none'
+                    },
+                    bubble: {textStyle: {fontSize: 11}}
+                };
+
+            var chart = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
+            chart.draw(data, options);
+            }
+            var frm = $('#emailsignup');
+            frm.submit(function(ev){
+                    console.log('submitted')
+                    ev.preventDefault();
+                    $.ajax({
+                        data: frm.serialize(),
+                        type: frm.attr('POST'),
+                        url: frm.attr('/signup'),
+                        success: function(response){
+                            console.log(response)
+                            $('#response').html(response);
+                        },
+                        error: function(data) {
+                            $('#response').html(response)
+                        }
+                    });
+                    return false;
+                });
+        });
+    </script>
+    <title>SetForSummer.org | Home</title>
+</head>
+
+<body>
+    <style>
+        #top-btn {
+            position: fixed;
+            top: 90%;
+            left: 89%;
+            /* display: none; */
+        }
+        .flow-text {
+            text-align: justify;
+        }
+        #chartdiv {
+            height: 40vh;
+        }
+        #chartdiv2 {
+            width: 100%;
+            height: 40vh;
+        }
+        /* #data {
+            display: none;
+        } */
+        .bubble_chart {
+            height: 40vh;
+        }
+        .slider-text {
+            text-shadow: 2px 2px 2px black;
+        }
+
+        .logo {
+            font-family: 'Finger Paint', cursive;
+            text-shadow: 0 0 10px #2c6707;
+
+            font-size: 1.7rem;
+        }
+    </style>
+
+    <a href="" name='top'></a>
+    <nav class="nav-extended blue accent-3 ">
+        <div class="nav-wrapper">
+            <div class="row">
+                <div class="col s5 offset-s1">
+                        <a href="#" class="logo brand-logo yellow-text hide-on-med-and-up" style="font-size: 1.7rem">
+                            <b>SetForSummer<span style="color: #00e600">.</span>Org</b>
+                        </a>
+                        <a href="#" class="logo brand-logo yellow-text hide-on-small-only" style="font-size: 2rem">
+                            <b>SetForSummer<span style="color: #00e600">.</span>Org</b>
+                        </a>
+                </div>
+            </div>
+            <a href="#" data-target="mobilenav" class="sidenav-trigger yellow-text">
+                <i class="material-icons">menu</i>
+            </a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down yellow-text">
+                <li>
+                    <a href="/faqs">FAQs</a>
+                </li>
+                <li>
+                    <a href="/contact">Contact</a>
+                </li>
+                <li>
+                    <a href="#signup" class="modal-trigger">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+        <div class="nav-content yellow-text">
+            <ul class="tabs tabs-transparent yellow-text">
+                <li class="tab">
+                    <a href="/setHome" class="active">Home</a>
+                </li>
+                <li class="tab">
+                    <a href="/food" class="">Food</a>
+                </li>
+                <li class="tab">
+                    <a href="/activities">Activities</a>
+                </li>
+                <li class="tab">
+                    <a href="/learning">Learning</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="section" id="top"></div>
+    <ul class="sidenav" id="mobilenav">
+        <li>
+            <a href="/faqs">FAQs</a>
+        </li>
+        <li>
+            <a href="/contact">Contact</a>
+        </li>
+        <li>
+            <a href="/signup" class="modal-trigger">Sign Up</a>
+        </li>
+    </ul>
+    <div id="signup" class="modal">
+        <div class="modal-content">
+            <h5>Sign Up!</h5>
+            <p>We want to know more about the visitors who use this site.</p>
+            <p>We'll use this data to help provide better resources and help more kids!</p>
+        </div>
+        <div class="row">
+            <div id="response">
+
+            </div>
+            <form action="" method="post" id="emailSignup" >
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col s8 offset-s1 input-field">
+                        <input type="email" name="email" id="email" class="validation">
+                        <label for="email">Input your email</label>
+                        <span class="helper-text" data-error="wrong" data-success="right"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s8 offset-s1 input-field">
+                        <input type="text" name="name" class="validate" id="name">
+                        <label for="name">Your name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s4 offset-s1 input-field">
+                        <input type="tel" name="phone" class="validate" id="phone">
+                        <label for="phone">Phone number</label>
+                    </div>
+                    <div class="col s4 offset-s1 input-field">
+                        <input type="number" name="zip" class="validate" id="zip">
+                        <label for="zip">Zipcode</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s10 offset-s1 m4 offset-m1 l4 offset-l1 input-field">
+                        <p>Which of the following best describes you:</p>
+                        <select name="relationship" id="relationship" class="browser-default">
+                            <option value="" selected disabled>--</option>
+                            <option value="families">Parent/Guardian/Youth</option>
+                            <option value="provider">provider</option>
+                            <option value="org">organization</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s10 offset-s1 input-field">
+                        <p>Sign up for our newsletter and we'll send you links</p>
+                        <p> to resources, events, and updates by email.</p>
+                        <p>
+                            <label for="news">
+                                <input type="checkbox" name="news" id="news">
+                                <span>Newsletter opt-in</span>
+                            </label>
+                        </p>
+                        <br>
+                        <p>What resources are you interested in? (Choose all that apply)</p>
+                        <p>
+                            <label for="food">
+                                <input type="checkbox" name="food" id="food">
+                                <span>Food Resources</span>
+                            </label>
+                        </p>
+                        <p>
+                            <label for="activities">
+                                <input type="checkbox" name="activities" id="activities">
+                                <span>Activities</span>
+                            </label>
+                        </p>
+                        <p>
+                            <label for="learning">
+                                <input type="checkbox" name="learning" id="learning">
+                                <span>learning</span>
+                            </label>
+                        </p>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" onclick="document.getElementById('emailSignup').submit()" class="modal-close waves-effect waves-green btn-flat">Sign Up</a>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+    </div>
+    <div class="section"></div>
+    <div class="container">
+        <div class="row">
+            <div class="slider">
+                <ul class="slides">
+                    <li>
+                        <img src="{%static 'setForSummer_app/images/3kids.jpg'%}">
+                        <div class="caption center-align">
+                            <div class="section"></div>
+                            <div class="section"></div>
+                            <h3 class="slider-text">Food Resources</h3>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="{%static 'setForSummer_app/images/kidsrunning.jpg'%}">
+                        <div class="caption center-align">
+                            <div class="section"></div>
+                            <div class="section"></div>
+                            <h3 class="slider-text">Activites</h3>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="{%static 'setForSummer_app/images/kidreading.jpg'%}">
+                        <div class="caption center-align">
+                            <div class="section"></div>
+                            <h3 class="slider-text ">Learning Opportunities</h3>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card col s12">
+                <h3 class="center-align green-text">What We Do</h3>
+                <p class="flow-text">
+                    Set for Summer aims to connect low-income & underprivileged youth to resources that they may lack during the Summer break
+                    from school. While most kids look forward to the break from class and homework, many low-income parents
+                    have tough obstacles to face; ranging from costs of adequate daycare to simply providing food three times
+                    a day.
+                </p>
+                <p class="flow-text">
+                    We bring the specific resources together in one place so that families, teachers, and organizations can find the help they
+                    need to care for their children and ensure all have a great Summer.
+                </p>
+                <div class="card-action right hoverable">
+                    <a href="#!" id="data_toggle">Show Me The Data!</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="data">
+            <div class="card col s12">
+                <h3>Data:</h3>
+                <div id="chartdiv"></div>
+                <h6 class="center"><b>Seattle is home to a majority of state-wide poverty</b></h6>
+                <div id="chartdiv2"></div>
+                <div class="icon_wrapper">
+                    <p>1 out of 6 kids in the United States face hunger.</p>
+                    <i style="color: orange;" class="material-icons">face</i>
+                    <i class="material-icons">face</i>
+                    <i class="material-icons">face</i>
+                    <i class="material-icons">face</i>
+                    <i class="material-icons">face</i>
+                    <i class="material-icons">face</i>
+                </div>
+                <br>
+                <div class="icon_wrapper">
+                    <p>5 out of 6 kids in Seattle who rely on free or reduced-price school meals aren’t getting free meals in the summer.</p>
+                    <i style="color: orange;" class="material-icons">face</i>
+                    <i style="color: orange;" class="material-icons">face</i>
+                    <i style="color: orange;" class="material-icons">face</i>
+                    <i style="color: orange;" class="material-icons">face</i>
+                    <i style="color: orange;" class="material-icons">face</i>
+                    <i class="material-icons">face</i>
+                </div>
+                    <div id="series_chart_div" class="bubble_chart col xs11 s11 m11 l11"></div>
+            </div>
+        </div>
+
+        <div class="row" id="food">
+            <div class="card col s12">
+                <h3 class="center-align green-text">Food Resources</h3>
+                <p class="flow-text">
+                    Kids who rely on school meals can struggle with hunger during the Summer. 472,000 Washington kids count on reduced-free and
+                    fee school meals during the school year, only 14 percent get food from summer programs.
+                </p>
+                <div class="card-action right hoverable">
+                    <a href="/food" class="center-align ">find food resources</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card col s12">
+                <a href="" name='activities'></a>
+                <h3 class="center-align green-text">Activity Resources</h3>
+                <p class="flow-text">
+                    Lack of affordable activites during the Summer leaves parents with little options for child care. Many children are are forced
+                    to stay at home, alone with no supervision. Bellow are resources for camps, programs and activities that
+                    are free or low-cost to keep children busy while parents are at work.
+                </p>
+                <div class="card-action right hoverable">
+                    <a href="/activities" class="center-align">find activities</a>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="learning">
+            <div class="card col s12">
+                <h3 class="center-align green-text">Learning Opportunities</h3>
+                <p class="flow-text">
+                    Students who fall behind over the summer are less likely to graduate from high school or go to college. The cumulative effect
+                    of lack of healthy food, safe places to spend the day, and discontinuation of learning can leave low-income
+                    students far behind their peers.
+                </p>
+                <div class="card-action right hoverable">
+                    <a href="/learning" class="center-align">find learning opportunities</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#top" id="top-btn" class="btn-floating green btn hide-on-med-and-up">
+        <i class="material-icons">keyboard_arrow_up</i>
+    </a>
+    <a href="#top" id="top-btn" class="btn-floating green btn-large hide-on-small-only">
+        <i class="material-icons">keyboard_arrow_up</i>
+    </a>
+    <footer class="page-footer blue accent-3">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">SetForSummer.org</h5>
+                    <p class="grey-text text-lighten-4">This site was built using Django at CodingDojo Seattle</p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li>
+                            <a class="grey-text text-lighten-3" href="/contact">Contact</a>
+                        </li>
+                        <li>
+                            <a class="grey-text text-lighten-3" href="/faqs">FAQs</a>
+                        </li>
+                        <li>
+                            <a class="grey-text text-lighten-3" href="/about">About this project</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+
+        </div>
+    </footer>
+
+    <script>
+        $(window).scroll(function(){
+            $('#top-btn').show();
+        });
+    </script>
+</body>
+
+</html>
