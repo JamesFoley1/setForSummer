@@ -53,6 +53,3 @@ class Users(models.Model):
     email = models.CharField(max_length=255)
     pwd = models.CharField(max_length=255)
     objects = UsersManager()
-
-    def __repr__(self):
-        return f"<User: {self.first_name} {self.last_name} {self.email} {self.pwd}>"

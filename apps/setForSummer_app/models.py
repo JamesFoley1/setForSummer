@@ -39,8 +39,6 @@ class Users(models.Model):
     activities = models.BooleanField(default=False)
     learning = models.BooleanField(default=False)
     objects = UserSignupManager()
-    def __repr__(self):
-        return f"<<Users: {self.user_name} {self.email} {self.phone} {self.zipcode} {self.newsletter} {self.food} {self.activities} {self.learning} {self.relationship}"
 
 class Location(models.Model):
     name = models.CharField(max_length=255)
